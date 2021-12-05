@@ -10,7 +10,7 @@ class Ingredient(models.Model):
     )
 
     class Meta:
-        ordering = ['name']
+        ordering = ['name', ]
         verbose_name = 'Ингредиент'
         verbose_name_plural = 'Ингредиенты'
 
@@ -23,7 +23,7 @@ class Recipe(models.Model):
         verbose_name='Название рецепта', max_length=200, unique=True
     )
     text = models.TextField(
-        verbose_name='Описание рецепта', blank=True
+        verbose_name='Описание рецепта'
     )
     cooking_time = models.PositiveSmallIntegerField(
         verbose_name='Время приготовления',
@@ -33,7 +33,7 @@ class Recipe(models.Model):
     )
 
     class Meta:
-        ordering = ['name']
+        ordering = ['name', ]
         verbose_name = 'Рецепт'
         verbose_name_plural = 'Рецепты'
 
