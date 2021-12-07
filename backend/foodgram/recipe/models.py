@@ -1,9 +1,10 @@
+from colorfield.fields import ColorField
 from django.db import models
 
 
 class Ingredient(models.Model):
     name = models.CharField(
-        verbose_name='Название ингредиента', max_length=200, unique=True
+        verbose_name='Название ингредиента', max_length=200
     )
     measurement_unit = models.CharField(
         verbose_name='Ед. измерения', max_length=30
@@ -16,6 +17,26 @@ class Ingredient(models.Model):
 
     def __str__(self):
         return '{}, {}'.format(self.name, self.measurement_unit)
+
+
+class Tag(models.Model):
+    name = models.CharField(
+        verbose_name='Название тега', max_length=200
+    )
+    color = ColorField(
+        verbose_name='HEX-код', default='#FF0000'
+    )
+    slug = models.SlugField(
+        verbose_name='slug', max_length=50
+    )
+
+    class Meta:
+        ordering = ['name', ]
+        verbose_name = 'Тег'
+        verbose_name_plural = 'Теги'
+
+    def __str__(self):
+        return '{}'.format(self.name,)
 
 
 class Recipe(models.Model):
@@ -31,6 +52,9 @@ class Recipe(models.Model):
     ingredients = models.ManyToManyField(
         Ingredient, through='RecipeHasIngredient'
     )
+    tags = models.ManyToManyField(
+        Tag, through='RecipeHasTag'
+    )
 
     class Meta:
         ordering = ['name', ]
@@ -41,6 +65,20 @@ class Recipe(models.Model):
         return '{}'.format(self.name,)
 
 
+class RecipeHasTag(models.Model):
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    tag = models.ForeignKey(
+        Tag, on_delete=models.CASCADE, verbose_name='Теги'
+    )
+
+    class Meta:
+        verbose_name = 'Тег'
+        verbose_name_plural = 'Теги'
+
+    def __str__(self):
+        return '{} для {}'.format(self.tag, self.recipe)
+
+
 class RecipeHasIngredient(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     ingredient = models.ForeignKey(
@@ -49,7 +87,6 @@ class RecipeHasIngredient(models.Model):
     amount = models.PositiveSmallIntegerField(verbose_name='кол-во')
 
     class Meta:
-        ordering = ['ingredient']
         verbose_name = 'Ингредиент'
         verbose_name_plural = 'Ингредиенты'
 
