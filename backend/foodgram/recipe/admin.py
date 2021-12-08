@@ -16,7 +16,9 @@ class RecipeHasTagInline(admin.TabularInline):
 
 
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'text', 'cooking_time',)
+    list_display = (
+        'name', 'author', 'cooking_time'
+    )
     search_fields = ('name',)
     list_filter = ('cooking_time',)
     empty_value_display = EMPTY_VALUE
@@ -30,7 +32,7 @@ class IngredientAdmin(admin.ModelAdmin):
 
 
 class TagAdmin(admin.ModelAdmin):
-    list_display = ('name', 'color', 'slug',)
+    list_display = ('name', 'slug',)
     search_fields = ('name',)
     empty_value_display = EMPTY_VALUE
 

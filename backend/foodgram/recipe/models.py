@@ -1,6 +1,8 @@
 from colorfield.fields import ColorField
 from django.db import models
 
+from users.models import User
+
 
 class Ingredient(models.Model):
     name = models.CharField(
@@ -43,6 +45,10 @@ class Recipe(models.Model):
     name = models.CharField(
         verbose_name='Название рецепта', max_length=200, unique=True
     )
+    author = models.ForeignKey(
+        User, verbose_name="Автор рецепта",
+        on_delete=models.CASCADE, related_name="recipes"
+    )
     text = models.TextField(
         verbose_name='Описание рецепта'
     )
@@ -54,6 +60,10 @@ class Recipe(models.Model):
     )
     tags = models.ManyToManyField(
         Tag, through='RecipeHasTag'
+    )
+    image = models.ImageField(
+        upload_to='static/images/', blank=True, null=True,
+        verbose_name="Картинка"
     )
 
     class Meta:
