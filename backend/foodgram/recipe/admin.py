@@ -33,6 +33,7 @@ class IngredientAdmin(admin.ModelAdmin):
 
 class TagAdmin(admin.ModelAdmin):
     list_display = ('name', 'slug',)
+    prepopulated_fields = {'slug': ('name',)}
     search_fields = ('name',)
     empty_value_display = EMPTY_VALUE
 

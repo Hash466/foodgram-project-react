@@ -1,0 +1,27 @@
+### endpoint /auth/
+POST http://127.0.0.1:8000/auth/jwt/create/
+Content-Type: application/json
+{
+    "username": "admin",
+    "password": "admin"
+}
+###
+GET http://127.0.0.1:8000/api/v1/users/
+
+
+
+### endpoint /tags/
+GET http://127.0.0.1:8000/api/v1/tags/
+###
+GET http://127.0.0.1:8000/api/v1/tags/3/
+###
+
+
+
+### endpoint /ingredients/
+GET http://127.0.0.1:8000/api/v1/ingredients/
+###
+GET http://127.0.0.1:8000/api/v1/ingredients/?search=кост
+###
+GET http://127.0.0.1:8000/api/v1/ingredients/5/
+###

@@ -9,7 +9,7 @@ class Ingredient(models.Model):
         verbose_name='Название ингредиента', max_length=200
     )
     measurement_unit = models.CharField(
-        verbose_name='Ед. измерения', max_length=30
+        verbose_name='Ед. измерения', max_length=200
     )
 
     class Meta:
@@ -29,7 +29,7 @@ class Tag(models.Model):
         verbose_name='HEX-код', default='#FF0000'
     )
     slug = models.SlugField(
-        verbose_name='slug', max_length=50
+        verbose_name='slug', max_length=200
     )
 
     class Meta:
