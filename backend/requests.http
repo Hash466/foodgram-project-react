@@ -1,14 +1,34 @@
 ### endpoint /auth/
-POST http://127.0.0.1:8000/auth/jwt/create/
+POST http://127.0.0.1:8000/api/users/
+
 Content-Type: application/json
 {
     "username": "admin",
     "password": "admin"
 }
 ###
-GET http://127.0.0.1:8000/api/v1/users/
 
 
+
+### endpoint /users/
+GET http://127.0.0.1:8000/api/users/
+###
+GET http://127.0.0.1:8000/api/users/2/
+###
+GET http://127.0.0.1:8000/api/users/me/
+###
+POST http://127.0.0.1:8000/api/users/
+Content-Type: application/json
+
+{
+
+    "email": "vpupkin@yandex.ru",
+    "username": "vasya.pupkin",
+    "first_name": "Вася",
+    "last_name": "Пупкин",
+    "password": "Qwerty123"
+
+}
 
 ### endpoint /tags/
 GET http://127.0.0.1:8000/api/v1/tags/

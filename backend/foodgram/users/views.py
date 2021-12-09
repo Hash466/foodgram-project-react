@@ -1,3 +1,30 @@
-from django.shortcuts import render
+from rest_framework import mixins, viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
-# Create your views here.
+from .models import User
+from .serializers import UserSerializer
+
+
+class CreateListRetrieveViewSet(
+    mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin,
+    viewsets.GenericViewSet
+):
+    pass
+
+
+class UserViewSet(CreateListRetrieveViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    # @action(detail=True)
+    # def me(self, request):
+    #     user = User.objects.get(username=request.username)
+    #     serializer = self.get_serializer(user)
+    #     return Response(serializer.data)
+
+    # @action(methods=['post'], detail=True)
+    # def set_password(self, request):
+    #     user = User.objects.get(username=request.username)
+    #     serializer = self.get_serializer(user)
+    #     return Response(serializer.data)
