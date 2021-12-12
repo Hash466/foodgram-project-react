@@ -1,0 +1,77 @@
+### Авторизация
+# @name login
+POST http://127.0.0.1:8000/auth/token/login/
+Content-Type: application/json
+
+{
+    "username": "XeP",
+    "password": "adm32rwv34r2in"
+}
+
+###
+
+@token = {{login.response.body.$.access}}
+
+
+### endpoint /auth/
+
+GET http://127.0.0.1:8000/auth/users/me/
+Authorization: Token e091ea2670e07c94f8c3531515c78d6a96e3bd7c
+
+###
+
+POST http://127.0.0.1:8000/auth/users/
+Content-Type: application/json
+
+{
+    "username": "XeP",
+    "password": "adm32rwv34r2in"
+}
+###
+
+GET http://127.0.0.1:8000/auth/users/me/
+
+headers={'Authorization': 'access_token myToken'}
+###
+
+POST http://127.0.0.1:8000/auth/token/logout/
+Authorization: Token {{token}}
+###
+
+
+
+### endpoint /users/
+GET http://127.0.0.1:8000/api/users/
+###
+GET http://127.0.0.1:8000/api/users/2/
+###
+GET http://127.0.0.1:8000/api/users/me/
+###
+POST http://127.0.0.1:8000/api/users/
+Content-Type: application/json
+
+{
+
+    "email": "vpupkin@yandex.ru",
+    "username": "vasya.pupkin",
+    "first_name": "Вася",
+    "last_name": "Пупкин",
+    "password": "Qwerty123"
+
+}
+
+### endpoint /tags/
+GET http://127.0.0.1:8000/api/v1/tags/
+###
+GET http://127.0.0.1:8000/api/v1/tags/3/
+###
+
+
+
+### endpoint /ingredients/
+GET http://127.0.0.1:8000/api/v1/ingredients/
+###
+GET http://127.0.0.1:8000/api/v1/ingredients/?search=кост
+###
+GET http://127.0.0.1:8000/api/v1/ingredients/5/
+###
