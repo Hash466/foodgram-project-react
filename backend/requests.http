@@ -1,41 +1,51 @@
 ### Авторизация
-# @name login
 POST http://127.0.0.1:8000/auth/token/login/
 Content-Type: application/json
 
 {
-    "username": "XeP",
-    "password": "adm32rwv34r2in"
+    "username": "rwerwrw",
+    "password": "ddedewsd3ewsde"
 }
 
 ###
 
-@token = {{login.response.body.$.access}}
+@token = 7fbcc64418dd8103efbd83e4d5a25b9a9fc298a0
+
+###
+
+POST http://127.0.0.1:8000/auth/token/logout/
+Authorization: Token {{token}}
+
+###
+
+
+
+
 
 
 ### endpoint /auth/
 
 GET http://127.0.0.1:8000/auth/users/me/
-Authorization: Token e091ea2670e07c94f8c3531515c78d6a96e3bd7c
+Authorization: Token {{token}}
 
+###
+
+GET http://127.0.0.1:8000/auth/users/1/
+Authorization: Token {{token}}
 ###
 
 POST http://127.0.0.1:8000/auth/users/
 Content-Type: application/json
 
 {
-    "username": "XeP",
-    "password": "adm32rwv34r2in"
+    "username": "rwerwrw",
+    "password": "ddedewsd3ewsde"
 }
 ###
 
-GET http://127.0.0.1:8000/auth/users/me/
-
-headers={'Authorization': 'access_token myToken'}
-###
-
-POST http://127.0.0.1:8000/auth/token/logout/
+GET http://127.0.0.1:8000/auth/users/2/
 Authorization: Token {{token}}
+
 ###
 
 
