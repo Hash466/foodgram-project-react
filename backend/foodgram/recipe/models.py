@@ -89,9 +89,11 @@ class RecipeHasTag(models.Model):
 
 
 class RecipeHasIngredient(models.Model):
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    recipe = models.ForeignKey(
+        Recipe, on_delete=models.CASCADE, related_name='recipes'
+    )
     ingredient = models.ForeignKey(
-        Ingredient, on_delete=models.CASCADE, verbose_name='Ингредиенты'
+        Ingredient, on_delete=models.CASCADE, verbose_name='Ингредиенты',
     )
     amount = models.PositiveSmallIntegerField(verbose_name='кол-во')
 
