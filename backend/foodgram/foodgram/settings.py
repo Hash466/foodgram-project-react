@@ -131,3 +131,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ],
 }
+
+CUSTOM_SETTINGS_DRF = {
+    'PAGE_SIZE_USERS': 3,
+}

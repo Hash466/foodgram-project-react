@@ -5,7 +5,7 @@ from users.models import User
 
 class Ingredient(models.Model):
     name = models.CharField(
-        verbose_name='Название ингредиента', max_length=200
+        verbose_name='Название ингредиента', max_length=200,
     )
     measurement_unit = models.CharField(
         verbose_name='Ед. измерения', max_length=200
