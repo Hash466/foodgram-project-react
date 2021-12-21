@@ -23,17 +23,17 @@ class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
 
-    # def get_serializer_class(self):
-    #     if self.action == 'create':
-    #         return RecipeCreateSerializer
-    #     else:
-    #         return RecipeSerializer
-
     def perform_create(self, serializer):
-        # print('\n\n\n*****************************************************')
-        # print({'tags': (self.request.data['tags'])})
-        # print('*****************************************************\n\n\n')
         serializer.save(
+            author=self.request.user,
+            tags={'tags': (self.request.data['tags'])},
+            ingredients=self.request.data['ingredients'],
+        )
+
+    def perform_update(self, serializer):
+        recipe = self.get_object()
+        serializer.save(
+            instance=recipe,
             author=self.request.user,
             tags={'tags': (self.request.data['tags'])},
             ingredients=self.request.data['ingredients'],

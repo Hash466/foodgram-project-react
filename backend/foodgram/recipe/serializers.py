@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework.generics import get_object_or_404
 
 from .models import (
     Ingredient, Tag, Recipe, RecipeHasIngredient, RecipeHasTag
@@ -54,14 +55,12 @@ class RecipeSerializer(serializers.ModelSerializer):
         recipe = Recipe.objects.create(**validated_data)
 
         for tag in tags['tags']:
-            current_tag, status = Tag.objects.get_or_create(pk=tag)
+            current_tag = Tag.objects.get(pk=tag)
             RecipeHasTag.objects.create(
                 recipe=recipe, tag=current_tag)
 
         for ingredient in ingredients:
-            current_ingredient, status = Ingredient.objects.get_or_create(
-                pk=ingredient['id']
-            )
+            current_ingredient = Ingredient.objects.get(pk=ingredient['id'])
             current_amount = ingredient.get('amount')
             RecipeHasIngredient.objects.create(
                 recipe=recipe, ingredient=current_ingredient,
@@ -69,3 +68,47 @@ class RecipeSerializer(serializers.ModelSerializer):
             )
 
         return recipe
+
+    def update(self, instance, validated_data):
+        tags = validated_data.pop('tags')
+        ingredients = validated_data.pop('ingredients')
+        recipe = Recipe.objects.filter(pk=instance.id)
+        instance = validated_data.pop('instance')
+        recipe.update(**validated_data)
+
+        old_inst_tags = [item for item in instance.tags.all()]
+        old_inst_ingredients = [item for item in instance.ingredients.all()]
+
+        for tag in tags['tags']:
+            current_tag = get_object_or_404(Tag, pk=tag)
+            if current_tag in old_inst_tags:
+                old_inst_tags.remove(current_tag)
+            else:
+                RecipeHasTag.objects.get_or_create(
+                    recipe=instance, tag=current_tag
+                )
+        for tag in old_inst_tags:
+            del_tag = RecipeHasTag.objects.filter(
+                recipe=instance.id, tag=tag.id
+            )
+            del_tag.delete()
+
+        for ingredient in ingredients:
+            current_ingredient = get_object_or_404(
+                Ingredient, pk=ingredient['id']
+            )
+            if current_ingredient in old_inst_ingredients:
+                old_inst_ingredients.remove(current_ingredient)
+            else:
+                current_amount = ingredient.get('amount')
+                RecipeHasIngredient.objects.get_or_create(
+                    recipe=instance, ingredient=current_ingredient,
+                    amount=current_amount
+                )
+        for ingredient in old_inst_ingredients:
+            del_ingredient = RecipeHasIngredient.objects.filter(
+                recipe=instance.id, ingredient=ingredient.id
+            )
+            del_ingredient.delete()
+
+        return instance

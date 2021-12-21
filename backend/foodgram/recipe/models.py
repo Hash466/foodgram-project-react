@@ -46,7 +46,7 @@ class Recipe(models.Model):
     )
     author = models.ForeignKey(
         User, verbose_name="Автор рецепта",
-        on_delete=models.CASCADE, related_name="recipes"
+        on_delete=models.CASCADE, related_name='recipes'
     )
     text = models.TextField(
         verbose_name='Описание рецепта'
@@ -63,6 +63,12 @@ class Recipe(models.Model):
     image = models.ImageField(
         upload_to='static/images/', blank=True, null=True,
         verbose_name="Картинка"
+    )
+    favorites = models.ManyToManyField(
+        User, through='FavoriteHasRecipe', related_name='favorites'
+    )
+    shopping_cart = models.ManyToManyField(
+        User, through='UserHasShoppingCart', related_name='shopping_carts'
     )
 
     class Meta:
@@ -85,7 +91,7 @@ class RecipeHasTag(models.Model):
         verbose_name_plural = 'Теги'
 
     def __str__(self):
-        return '{} для {}'.format(self.tag, self.recipe)
+        return 'Тег {} у рецепта {}'.format(self.tag, self.recipe)
 
 
 class RecipeHasIngredient(models.Model):
@@ -100,4 +106,34 @@ class RecipeHasIngredient(models.Model):
         verbose_name_plural = 'Ингредиенты'
 
     def __str__(self):
-        return '{} для {}'.format(self.ingredient, self.recipe)
+        return 'Ингредиент {} для рецепта {}'.format(
+            self.ingredient, self.recipe
+        )
+
+
+class FavoriteHasRecipe(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, verbose_name='Пользователи'
+    )
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'Избранный'
+        verbose_name_plural = 'Избранные'
+
+    def __str__(self):
+        return 'Рецепт {} в избранном у {}'.format(self.recipe, self.user)
+
+
+class UserHasShoppingCart(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, verbose_name='Пользователи'
+    )
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'Список покупок'
+        verbose_name_plural = 'Списки покупок'
+
+    def __str__(self):
+        return 'Рецепт {} в списке покупок у {}'.format(self.recipe, self.user)
