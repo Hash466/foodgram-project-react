@@ -17,28 +17,24 @@ class IngredientSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ingredient
-        fields = ('id', 'name', 'measurement_unit', 'amount')
+        fields = ('id', 'name', 'measurement_unit')
 
 
 class IngredientForRecipeSerializer(serializers.ModelSerializer):
-    amount = serializers.SerializerMethodField()
+    id = serializers.ReadOnlyField(source='ingredient.id', read_only=True)
+    name = serializers.ReadOnlyField(source='ingredient.name', read_only=True)
+    measurement_unit = serializers.ReadOnlyField(
+        source='ingredient.measurement_unit', read_only=True
+    )
 
     class Meta:
-        model = Ingredient
+        model = RecipeHasIngredient
         fields = ('id', 'name', 'measurement_unit', 'amount')
-
-    def get_amount(self, obj):
-        return RecipeHasIngredient.objects.filter(
-            ingredient=obj.pk,
-            recipe=obj.pk__ingredients__recipe__ingredients
-        )
-        # return RecipeHasIngredient.objects.get(ingredient=obj.pk).amount
-        # obj.ingredients.values(). -> QuerySet
 
 
 class RecipeSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True, read_only=True)
-    ingredients = IngredientForRecipeSerializer(many=True, read_only=True)
+    ingredients = serializers.SerializerMethodField()
     author = UserSerializer(read_only=True)
 
     class Meta:
@@ -47,6 +43,10 @@ class RecipeSerializer(serializers.ModelSerializer):
             'id', 'tags', 'author', 'ingredients', 'name',
             'image', 'text', 'cooking_time'
         )
+
+    def get_ingredients(self, obj):
+        ingredients = RecipeHasIngredient.objects.filter(recipe=obj)
+        return IngredientForRecipeSerializer(ingredients, many=True).data
 
     def create(self, validated_data):
         tags = validated_data.pop('tags')

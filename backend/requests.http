@@ -1,47 +1,160 @@
 ### endpoint /auth/
-POST http://127.0.0.1:8000/api/users/
-
+### Авторизация
+POST http://127.0.0.1:8000/api/auth/token/login/
 Content-Type: application/json
+
 {
-    "username": "admin",
-    "password": "admin"
+    "email": "admin499@adm.ru",
+    "password": "fded34ed54ed"
 }
+
 ###
+
+@token = 2634a714c0fb3b145d15b5e5c9d985cccb92b7f4
+
+###
+
+POST http://127.0.0.1:8000/api/auth/token/logout/
+Authorization: Token {{token}}
+
+###
+
+
+
+
+
+
+
 
 
 
 ### endpoint /users/
+
+
 GET http://127.0.0.1:8000/api/users/
+Authorization: Token {{token}}
+
 ###
-GET http://127.0.0.1:8000/api/users/2/
+
+GET http://127.0.0.1:8000/api/users/?limit=2
+Authorization: Token {{token}}
+
 ###
+
+GET http://127.0.0.1:8000/api/users/?page=2
+Authorization: Token {{token}}
+
+###
+
+GET http://127.0.0.1:8000/api/users/201/
+
+###
+
 GET http://127.0.0.1:8000/api/users/me/
+Content-Type: application/json
+Authorization: Token {{token}}
+
 ###
+
 POST http://127.0.0.1:8000/api/users/
 Content-Type: application/json
 
 {
 
-    "email": "vpupkin@yandex.ru",
-    "username": "vasya.pupkin",
-    "first_name": "Вася",
-    "last_name": "Пупкин",
-    "password": "Qwerty123"
+    "email": "admin499@adm.ru",
+    "username": "admin4499",
+    "first_name": "sdvsv",
+    "last_name": "sdfsdcsdc",
+    "password": "fded34ed54ed"
 
 }
 
+###
+
+POST http://127.0.0.1:8000/api/users/set_password/
+Content-Type: application/json
+
+{
+
+    "new_password": "treg345t3efrd2r3fr",
+    "current_password": "ewrr23rwgfwr32wrwrwf"
+
+}
+
+###
+
+
+
+
+
+
+
 ### endpoint /tags/
-GET http://127.0.0.1:8000/api/v1/tags/
+
+
+GET http://127.0.0.1:8000/api/tags/
 ###
-GET http://127.0.0.1:8000/api/v1/tags/3/
+
+
+GET http://127.0.0.1:8000/api/tags/3/
 ###
+
+
+
+
+
 
 
 
 ### endpoint /ingredients/
-GET http://127.0.0.1:8000/api/v1/ingredients/
+
+
+GET http://127.0.0.1:8000/api/ingredients/
 ###
-GET http://127.0.0.1:8000/api/v1/ingredients/?search=кост
+
+
+GET http://127.0.0.1:8000/api/ingredients/125/
 ###
-GET http://127.0.0.1:8000/api/v1/ingredients/5/
+
+
+
+
+
+
+
+
+### endpoint /Recipes/
+
+
+GET http://127.0.0.1:8000/api/recipes/
 ###
+
+
+GET http://127.0.0.1:8000/api/recipes/4/
+###
+
+
+
+POST http://127.0.0.1:8000/api/recipes/
+Content-Type: application/json
+Authorization: Token {{token}}
+
+{
+  "ingredients": [
+    {
+      "id": 1,
+      "amount": 10
+    }
+  ],
+  "tags": [
+      1,
+      2
+  ],
+  "image": null,
+  "name": "string",
+  "text": "string",
+  "cooking_time": 1
+}
+
+###
+
