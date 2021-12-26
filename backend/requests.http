@@ -123,16 +123,19 @@ GET http://127.0.0.1:8000/api/ingredients/125/
 
 
 
-### endpoint /Recipes/
+### endpoint /recipes/
 
 
 GET http://127.0.0.1:8000/api/recipes/
 ###
 
 
-GET http://127.0.0.1:8000/api/recipes/4/
+GET http://127.0.0.1:8000/api/recipes/5/
 ###
 
+
+DELETE http://127.0.0.1:8000/api/recipes/5/
+###
 
 
 POST http://127.0.0.1:8000/api/recipes/
@@ -143,7 +146,7 @@ Authorization: Token {{token}}
   "ingredients": [
     {
       "id": 1,
-      "amount": 10
+      "amount": 150
     }
   ],
   "tags": [
@@ -151,10 +154,52 @@ Authorization: Token {{token}}
       2
   ],
   "image": null,
-  "name": "string",
-  "text": "string",
-  "cooking_time": 1
+  "name": "string2",
+  "text": "string2",
+  "cooking_time": 100
 }
 
 ###
 
+
+DELETE http://127.0.0.1:8000/api/recipes/6/
+###
+
+
+PATCH http://127.0.0.1:8000/api/recipes/6/
+Content-Type: application/json
+Authorization: Token {{token}}
+
+{
+  "ingredients": [
+    {
+      "id": 666,
+      "amount": 666
+    },
+    {
+      "id": 666,
+      "amount": 666
+    }
+  ],
+  "tags": [
+    1,
+    2
+  ],
+  "image": null,
+  "name": "888",
+  "text": "8888",
+  "cooking_time": 888
+}
+
+###
+
+
+
+
+
+
+
+### endpoint /recipes/
+
+GET http://127.0.0.1:8000/api/users/subscriptions/
+###

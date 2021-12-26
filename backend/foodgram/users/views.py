@@ -5,7 +5,7 @@ from rest_framework.response import Response
 
 from foodgram.settings import CUSTOM_SETTINGS_DRF
 
-from .models import User
+from .models import User, Subscription
 from .serializers import (SetPasswordSerializer, UserCreateSerializer,
                           UserSerializer)
 
@@ -13,6 +13,13 @@ from .serializers import (SetPasswordSerializer, UserCreateSerializer,
 class CreateListRetrieveViewSet(
     mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin,
     viewsets.GenericViewSet
+):
+    pass
+
+
+class CreateRetrieveDestroyViewSet(
+    mixins.CreateModelMixin, mixins.RetrieveModelMixin,
+    mixins.DestroyModelMixin, viewsets.GenericViewSet
 ):
     pass
 
@@ -50,3 +57,8 @@ class UserViewSet(CreateListRetrieveViewSet):
         self.request.user.save()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class SubscriptionsViewSet(CreateRetrieveDestroyViewSet):
+    # queryset = Subscription.objects.all()
+    pass
