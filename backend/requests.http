@@ -61,11 +61,11 @@ Content-Type: application/json
 
 {
 
-    "email": "admin499@adm.ru",
-    "username": "admin4499",
-    "first_name": "sdvsv",
-    "last_name": "sdfsdcsdc",
-    "password": "fded34ed54ed"
+    "email": "manda@adm.ru",
+    "username": "manda",
+    "first_name": "manda",
+    "last_name": "manda",
+    "password": "ugerf7364r"
 
 }
 
@@ -202,4 +202,19 @@ Authorization: Token {{token}}
 ### endpoint /recipes/
 
 GET http://127.0.0.1:8000/api/users/subscriptions/
+Content-Type: application/json
+Authorization: Token {{token}}
+###
+
+
+POST http://127.0.0.1:8000/api/users/4/subscribe/
+Content-Type: application/json
+Authorization: Token {{token}}
+###
+
+
+
+DELETE http://127.0.0.1:8000/api/users/4/subscribe/
+Content-Type: application/json
+Authorization: Token {{token}}
 ###
