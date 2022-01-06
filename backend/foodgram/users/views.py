@@ -35,7 +35,7 @@ class UserSetPagination(PageNumberPagination):
 
 class UserViewSet(CreateListRetrieveViewSet):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    # serializer_class = UserSerializer
     pagination_class = UserSetPagination
 
     def get_serializer_class(self):
@@ -43,6 +43,10 @@ class UserViewSet(CreateListRetrieveViewSet):
             return SetPasswordSerializer
         elif self.action == 'create':
             return UserCreateSerializer
+        elif (
+            self.action == 'subscriptions' or self.action == 'subscribe'
+        ):
+            return SubscriptionsSerializer
         else:
             return UserSerializer
 
@@ -62,44 +66,26 @@ class UserViewSet(CreateListRetrieveViewSet):
 
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+    @action(detail=False)
+    def subscriptions(self, request):
+        user = request.user
+        subscriptions = Subscription.objects.filter(user=user)
+        serializer = self.get_serializer(subscriptions, many=True)
+        return Response(serializer.data)
 
-class SubscriptionsViewSet(ListViewSet):
-    serializer_class = SubscriptionsSerializer
-
-    def get_queryset(self):
-        user = self.request.user
-        return Subscription.objects.filter(user=user)
-
-
-class SubscribeViewSet(CreateDestroyViewSet):
-    serializer_class = SubscriptionsSerializer
-    queryset = Subscription.objects.all()
-
-    def perform_create(self, serializer):
-        print('\n\n\n********************************************')
-        print(self.kwargs['id'])
-        print(self.http_method_names)
-        print('********************************************\n\n\n')
-        serializer.save(
-            user=self.request.user,
-            author=get_object_or_404(User, id=self.kwargs['id'])
-        )
-
-    def perform_destroy(self, instance):
-        print('\n\n\n********************************************')
-        print(self.kwargs['id'])
-        print(self.http_method_names)
-        print('********************************************\n\n\n')
-        instance.delete()
-
-    # def destroy(self, request, *args, **kwargs):
-    #     instance = get_object_or_404(
-    #         Subscription,
-    #         user=self.request.user,
-    #         author=User.objects.get(id=self.kwargs['id'])
-    #     )
-    #     print('\n\n\n********************************************')
-    #     print(instance)
-    #     print('********************************************\n\n\n')
-    #     self.perform_destroy(instance)
-    #     return Response(status=status.HTTP_204_NO_CONTENT)
+    @action(['post', 'delete'], detail=True)
+    def subscribe(self, request, pk):
+        user = request.user
+        author = get_object_or_404(User, id=pk)
+        if request.method == 'POST':
+            Subscription.objects.get_or_create(
+                user=user, author=author
+            )
+            subscribe = Subscription.objects.filter(author=author, user=user)
+            serializer = self.get_serializer(subscribe, many=True)
+            return Response(serializer.data)
+        else:
+            subscribe = Subscription.objects.filter(author=author, user=user)
+            subscribe.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+            

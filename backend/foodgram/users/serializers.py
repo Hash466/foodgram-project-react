@@ -1,4 +1,3 @@
-from re import T
 from djoser.serializers import SetPasswordSerializer as DjSetPasswordSerializer
 from djoser.serializers import UserCreateSerializer as DjUserCreateSerializer
 from rest_framework import serializers
@@ -66,7 +65,7 @@ class SubscriptionsSerializer(serializers.ModelSerializer):
         model = Subscription
         fields = (
             'email', 'id', 'username', 'first_name', 'last_name',
-            'is_subscribed', 'recipes', 'recipes_count',
+            'is_subscribed', 'recipes', 'recipes_count'
         )
 
     def get_is_subscribed(self, obj):

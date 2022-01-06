@@ -1,8 +1,14 @@
-from rest_framework import filters, viewsets
+from rest_framework import filters, status, viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework.generics import get_object_or_404
 
-from .models import Ingredient, Tag, Recipe
+from .models import (
+    Ingredient, Tag, Recipe, FavoriteHasRecipe, UserHasShoppingCart
+)
 from .serializers import (
     IngredientSerializer, TagSerializer, RecipeSerializer,
+    RecipeForFavoriteSerializer
 )
 
 
@@ -21,7 +27,13 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
-    serializer_class = RecipeSerializer
+    #serializer_class = RecipeSerializer ###### ПРОВЕРЬ!
+
+    def get_serializer_class(self):
+        if self.action == 'favorite' or self.action == 'shopping_cart':
+            return RecipeForFavoriteSerializer
+        else:
+            return RecipeSerializer
 
     def perform_create(self, serializer):
         serializer.save(
@@ -38,3 +50,37 @@ class RecipeViewSet(viewsets.ModelViewSet):
             tags={'tags': (self.request.data['tags'])},
             ingredients=self.request.data['ingredients'],
         )
+
+    @action(['post', 'delete'], detail=True)
+    def favorite(self, request, pk):
+        user = request.user
+        recipe = get_object_or_404(Recipe, id=pk)
+        if request.method == 'POST':
+            FavoriteHasRecipe.objects.get_or_create(
+                user=user, recipe=recipe
+            )
+            serializer = self.get_serializer(recipe)
+            return Response(serializer.data)
+        else:
+            favorite = FavoriteHasRecipe.objects.filter(
+                user=user, recipe=recipe
+            )
+            favorite.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+    @action(['post', 'delete'], detail=True)
+    def shopping_cart(self, request, pk):
+        user = request.user
+        recipe = get_object_or_404(Recipe, id=pk)
+        if request.method == 'POST':
+            UserHasShoppingCart.objects.get_or_create(
+                user=user, recipe=recipe
+            )
+            serializer = self.get_serializer(recipe)
+            return Response(serializer.data)
+        else:
+            favorite = UserHasShoppingCart.objects.filter(
+                user=user, recipe=recipe
+            )
+            favorite.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
