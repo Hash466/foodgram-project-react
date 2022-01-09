@@ -54,12 +54,14 @@ class RecipeSerializer(serializers.ModelSerializer):
         recipe = Recipe.objects.create(**validated_data)
 
         for tag in tags['tags']:
-            current_tag = Tag.objects.get(pk=tag)
+            current_tag = get_object_or_404(Tag, pk=tag)
             RecipeHasTag.objects.create(
                 recipe=recipe, tag=current_tag)
 
         for ingredient in ingredients:
-            current_ingredient = Ingredient.objects.get(pk=ingredient['id'])
+            current_ingredient = get_object_or_404(
+                Ingredient, pk=ingredient['id']
+            )
             current_amount = ingredient.get('amount')
             RecipeHasIngredient.objects.create(
                 recipe=recipe, ingredient=current_ingredient,
@@ -75,8 +77,14 @@ class RecipeSerializer(serializers.ModelSerializer):
         instance = validated_data.pop('instance')
         recipe.update(**validated_data)
 
-        old_inst_tags = [item for item in instance.tags.all()]
+        old_inst_tags1 = [item for item in instance.tags.all()]
+        old_inst_tags2 = instance.tags.all().values()
         old_inst_ingredients = [item for item in instance.ingredients.all()]
+
+        print('\n\n\n#################################################')
+        print(old_inst_tags1)
+        print(old_inst_tags2)
+        print('#################################################\n\n\n')
 
         for tag in tags['tags']:
             current_tag = get_object_or_404(Tag, pk=tag)

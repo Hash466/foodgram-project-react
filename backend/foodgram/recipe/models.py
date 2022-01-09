@@ -1,5 +1,7 @@
 from colorfield.fields import ColorField
+
 from django.db import models
+
 from users.models import User
 
 
@@ -45,7 +47,7 @@ class Recipe(models.Model):
         verbose_name='Название рецепта', max_length=200, unique=True
     )
     author = models.ForeignKey(
-        User, verbose_name="Автор рецепта",
+        User, verbose_name='Автор рецепта',
         on_delete=models.CASCADE, related_name='recipes'
     )
     text = models.TextField(
@@ -61,8 +63,8 @@ class Recipe(models.Model):
         Tag, through='RecipeHasTag'
     )
     image = models.ImageField(
-        upload_to='static/images/', blank=True, null=True,
-        verbose_name="Картинка"
+        upload_to='media/images/', blank=True, null=True,
+        verbose_name='Картинка'
     )
     favorites = models.ManyToManyField(
         User, through='FavoriteHasRecipe', related_name='favorites'
@@ -89,6 +91,12 @@ class RecipeHasTag(models.Model):
     class Meta:
         verbose_name = 'Тег'
         verbose_name_plural = 'Теги'
+        constraints = (
+            models.UniqueConstraint(
+                fields=['recipe', 'tag'],
+                name='unique tag value'
+            ),
+        )
 
     def __str__(self):
         return 'Тег {} у рецепта {}'.format(self.tag, self.recipe)
@@ -104,6 +112,12 @@ class RecipeHasIngredient(models.Model):
     class Meta:
         verbose_name = 'Ингредиент'
         verbose_name_plural = 'Ингредиенты'
+        constraints = (
+            models.UniqueConstraint(
+                fields=['recipe', 'ingredient'],
+                name='unique ingredient value'
+            ),
+        )
 
     def __str__(self):
         return 'Ингредиент {} для рецепта {}'.format(
@@ -122,6 +136,12 @@ class FavoriteHasRecipe(models.Model):
     class Meta:
         verbose_name = 'Избранный'
         verbose_name_plural = 'Избранные'
+        constraints = (
+            models.UniqueConstraint(
+                fields=['verbose_name', 'verbose_name_plural'],
+                name='unique favorite value'
+            ),
+        )
 
     def __str__(self):
         return 'Рецепт {} в избранном у {}'.format(self.recipe, self.user)
@@ -136,6 +156,12 @@ class UserHasShoppingCart(models.Model):
     class Meta:
         verbose_name = 'Список покупок'
         verbose_name_plural = 'Списки покупок'
+        constraints = (
+            models.UniqueConstraint(
+                fields=['user', 'recipe'],
+                name='unique shopping cart value'
+            ),
+        )
 
     def __str__(self):
         return 'Рецепт {} в списке покупок у {}'.format(self.recipe, self.user)

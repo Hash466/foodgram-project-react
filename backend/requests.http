@@ -147,18 +147,21 @@ Authorization: Token {{token}}
 {
   "ingredients": [
     {
-      "id": 1,
-      "amount": 150
+      "id": 222,
+      "amount": 222
+    },
+    {
+      "id": 333,
+      "amount": 333
     }
   ],
   "tags": [
-      1,
-      2
+      1
   ],
   "image": null,
-  "name": "string2",
-  "text": "string2",
-  "cooking_time": 100
+  "name": "string5",
+  "text": "string55",
+  "cooking_time": 1022
 }
 
 ###
@@ -179,8 +182,8 @@ Authorization: Token {{token}}
       "amount": 666
     },
     {
-      "id": 666,
-      "amount": 666
+      "id": 777,
+      "amount": 777
     }
   ],
   "tags": [
