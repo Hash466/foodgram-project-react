@@ -15,6 +15,16 @@ class RecipeHasTagInline(admin.TabularInline):
     extra = 1
 
 
+class FavoriteHasRecipeInline(admin.TabularInline):
+    model = Recipe.favorites.through
+    extra = 1
+
+
+class UserHasShoppingCartInline(admin.TabularInline):
+    model = Recipe.shopping_cart.through
+    extra = 1
+
+
 class RecipeAdmin(admin.ModelAdmin):
     list_display = (
         'name', 'author', 'cooking_time'
@@ -22,7 +32,10 @@ class RecipeAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     list_filter = ('cooking_time',)
     empty_value_display = EMPTY_VALUE
-    inlines = (RecipeHasIngredientInline, RecipeHasTagInline)
+    inlines = (
+        RecipeHasIngredientInline, RecipeHasTagInline, FavoriteHasRecipeInline,
+        UserHasShoppingCartInline
+    )
 
 
 class IngredientAdmin(admin.ModelAdmin):
