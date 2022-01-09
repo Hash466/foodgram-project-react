@@ -5,12 +5,12 @@ Content-Type: application/json
 
 {
     "email": "admin499@adm.ru",
-    "password": "fded34ed54ed"
+    "password": "2d13ed2d123qd23d1232e"
 }
 
 ###
 
-@token = 2634a714c0fb3b145d15b5e5c9d985cccb92b7f4
+@token = ec2ad6f83182315bab912dbf06fc4a443c59c5c6
 
 ###
 
@@ -32,7 +32,6 @@ Authorization: Token {{token}}
 
 
 GET http://127.0.0.1:8000/api/users/
-Authorization: Token {{token}}
 
 ###
 
@@ -46,7 +45,7 @@ Authorization: Token {{token}}
 
 ###
 
-GET http://127.0.0.1:8000/api/users/201/
+GET http://127.0.0.1:8000/api/users/1/
 
 ###
 
@@ -61,10 +60,10 @@ Content-Type: application/json
 
 {
 
-    "email": "manda@adm.ru",
-    "username": "manda",
-    "first_name": "manda",
-    "last_name": "manda",
+    "email": "her-kuma8@adm.ru",
+    "username": "her-kuma8",
+    "first_name": "her-kuma8",
+    "last_name": "her-kuma8",
     "password": "ugerf7364r"
 
 }
@@ -73,11 +72,12 @@ Content-Type: application/json
 
 POST http://127.0.0.1:8000/api/users/set_password/
 Content-Type: application/json
+Authorization: Token {{token}}
 
 {
 
-    "new_password": "treg345t3efrd2r3fr",
-    "current_password": "ewrr23rwgfwr32wrwrwf"
+    "new_password": "2d13ed2d123qd23d1232e",
+    "current_password": "fded34ed54ed"
 
 }
 
@@ -96,7 +96,7 @@ GET http://127.0.0.1:8000/api/tags/
 ###
 
 
-GET http://127.0.0.1:8000/api/tags/3/
+GET http://127.0.0.1:8000/api/tags/1/
 ###
 
 
@@ -126,7 +126,9 @@ GET http://127.0.0.1:8000/api/ingredients/125/
 ### endpoint /recipes/
 
 
-GET http://127.0.0.1:8000/api/recipes/
+GET http://127.0.0.1:8000/api/recipes/?tags=utro&tags=vecher
+Content-Type: application/json
+Authorization: Token {{token}}
 ###
 
 
@@ -199,15 +201,15 @@ Authorization: Token {{token}}
 
 
 
-### endpoint /recipes/
+### endpoint /subscriptions/
 
-GET http://127.0.0.1:8000/api/users/subscriptions/
+GET http://127.0.0.1:8000/api/users/subscriptions/?page=2
 Content-Type: application/json
 Authorization: Token {{token}}
 ###
 
 
-POST http://127.0.0.1:8000/api/users/4/subscribe/
+POST http://127.0.0.1:8000/api/users/5/subscribe/
 Content-Type: application/json
 Authorization: Token {{token}}
 ###
@@ -215,6 +217,49 @@ Authorization: Token {{token}}
 
 
 DELETE http://127.0.0.1:8000/api/users/4/subscribe/
+Content-Type: application/json
+Authorization: Token {{token}}
+###
+
+
+
+
+
+
+### endpoint /favorite/
+
+POST http://127.0.0.1:8000/api/recipes/4/favorite/
+Content-Type: application/json
+Authorization: Token {{token}}
+###
+
+
+DELETE http://127.0.0.1:8000/api/recipes/4/favorite/
+Content-Type: application/json
+Authorization: Token {{token}}
+###
+
+
+
+
+
+
+
+
+### endpoint /shopping_cart/
+
+POST http://127.0.0.1:8000/api/recipes/5/shopping_cart/
+Content-Type: application/json
+Authorization: Token {{token}}
+###
+
+DELETE http://127.0.0.1:8000/api/recipes/5/shopping_cart/
+Content-Type: application/json
+Authorization: Token {{token}}
+###
+
+
+GET http://127.0.0.1:8000/api/recipes/download_shopping_cart/
 Content-Type: application/json
 Authorization: Token {{token}}
 ###

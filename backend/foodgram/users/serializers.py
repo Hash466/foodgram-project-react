@@ -1,8 +1,7 @@
 from djoser.serializers import SetPasswordSerializer as DjSetPasswordSerializer
 from djoser.serializers import UserCreateSerializer as DjUserCreateSerializer
-from rest_framework import serializers
-
 from recipe.models import Recipe
+from rest_framework import serializers
 
 from .models import Subscription, User
 
@@ -35,14 +34,6 @@ class RecipeForSubscriptionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
         fields = ('id', 'name', 'image', 'cooking_time')
-
-    # def get_name(self, obj):
-    #     print('\n\n\n********************************************')
-    #     print('user')
-    #     print(user.username)
-    #     print(Subscription.objects.filter(user=user))
-    #     print('********************************************\n\n\n')
-    #     return obj
 
 
 class SubscriptionsSerializer(serializers.ModelSerializer):

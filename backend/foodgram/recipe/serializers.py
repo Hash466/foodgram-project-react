@@ -1,10 +1,9 @@
 from rest_framework import serializers
 from rest_framework.generics import get_object_or_404
-
-from .models import (
-    Ingredient, Tag, Recipe, RecipeHasIngredient, RecipeHasTag
-)
 from users.serializers import UserSerializer
+
+from .models import (Ingredient, Recipe, RecipeHasIngredient, RecipeHasTag,
+                     Tag, UserHasShoppingCart)
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -112,6 +111,28 @@ class RecipeSerializer(serializers.ModelSerializer):
             del_ingredient.delete()
 
         return instance
+
+
+class ShoppingCartSerializer(serializers.ModelSerializer):
+    user = serializers.IntegerField(source='user.id')
+    recipe = serializers.IntegerField(source='recipe.id')
+
+    class Meta:
+        model = UserHasShoppingCart
+        fields = ('user', 'recipe')
+
+    def validate(self, data):
+        user = data['user']['id']
+        recipe = data['recipe']['id']
+        if UserHasShoppingCart.objects.filter(
+            user=user, recipe__id=recipe
+        ).exists():
+            raise serializers.ValidationError(
+                {
+                    "errors": "Вы уже добавили рецепт в корзину"
+                }
+            )
+        return data
 
 
 class RecipeForFavoriteSerializer(serializers.ModelSerializer):
