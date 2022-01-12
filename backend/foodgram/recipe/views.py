@@ -1,3 +1,4 @@
+from django.db.models import Sum
 from django.http.response import HttpResponse
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, permissions, status, viewsets
@@ -113,28 +114,19 @@ class ShoppingCartView(APIView):
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
 def download_shopping_cart(request):
-    user = request.user
-    cart = UserHasShoppingCart.objects.filter(user=user)
-    shopping_list = {}
-    for item in cart:
-        recipe = item.recipe
-        ingredients = RecipeHasIngredient.objects.filter(recipe=recipe)
-        for item in ingredients:
-            amount = item.amount
-            name = item.ingredient.name
-            measurement_unit = item.ingredient.measurement_unit
-            if name in shopping_list:
-                shopping_list[name][0] += int(amount)
-            else:
-                shopping_list[name] = [int(amount), measurement_unit]
+    ingredients = RecipeHasIngredient.objects.filter(
+        recipe__carts__user=request.user
+        ).values_list(
+            "ingredient_id__name", "ingredient_id__measurement_unit", "amount"
+            ).annotate(amount_sum=Sum('amount'))
     shopping_cart = []
-    for item in shopping_list:
+    for item in ingredients:
+        name, measurement_unit, amount, amount_sum = item
         shopping_cart.append(
-            f'{item} ({shopping_list[item][1]}) - {shopping_list[item][0]}\n'
+            f'{name} ({measurement_unit}) - {amount_sum}\n'
         )
     response = HttpResponse(shopping_cart, 'Content-Type: text/plain')
     response['Content-Disposition'] = (
         'attachment;' 'filename="shopping_cart.txt"'
     )
-
     return response
