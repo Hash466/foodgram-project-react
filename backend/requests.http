@@ -60,11 +60,11 @@ Content-Type: application/json
 
 {
 
-    "email": "her-kuma8@adm.ru",
-    "username": "her-kuma8",
-    "first_name": "her-kuma8",
-    "last_name": "her-kuma8",
-    "password": "ugerf7364r"
+    "email": "admin3@adm.ru",
+    "username": "admin3",
+    "first_name": "admin3",
+    "last_name": "admin3",
+    "password": "uyg756f7uvyur"
 
 }
 
@@ -136,7 +136,8 @@ GET http://127.0.0.1:8000/api/recipes/5/
 ###
 
 
-DELETE http://127.0.0.1:8000/api/recipes/5/
+DELETE http://127.0.0.1:8000/api/recipes/9/
+Authorization: Token {{token}}
 ###
 
 
@@ -167,7 +168,7 @@ Authorization: Token {{token}}
 ###
 
 
-DELETE http://127.0.0.1:8000/api/recipes/6/
+DELETE http://127.0.0.1:8000/api/recipes/9/
 ###
 
 

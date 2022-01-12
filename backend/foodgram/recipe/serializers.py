@@ -77,26 +77,22 @@ class RecipeSerializer(serializers.ModelSerializer):
         instance = validated_data.pop('instance')
         recipe.update(**validated_data)
 
-        old_inst_tags1 = [item for item in instance.tags.all()]
-        old_inst_tags2 = instance.tags.all().values()
-        old_inst_ingredients = [item for item in instance.ingredients.all()]
-
-        print('\n\n\n#################################################')
-        print(old_inst_tags1)
-        print(old_inst_tags2)
-        print('#################################################\n\n\n')
+        old_inst_tags = [item[0] for item in instance.tags.values_list('id')]
+        old_inst_ingredients = [
+            item for item in instance.ingredients.values_list('id')
+        ]
 
         for tag in tags['tags']:
             current_tag = get_object_or_404(Tag, pk=tag)
-            if current_tag in old_inst_tags:
-                old_inst_tags.remove(current_tag)
+            if current_tag.pk in old_inst_tags:
+                old_inst_tags.remove(current_tag.pk)
             else:
                 RecipeHasTag.objects.get_or_create(
                     recipe=instance, tag=current_tag
                 )
-        for tag in old_inst_tags:
+        for tag_id in old_inst_tags:
             del_tag = RecipeHasTag.objects.filter(
-                recipe=instance.id, tag=tag.id
+                recipe=instance.id, tag=tag_id
             )
             del_tag.delete()
 
@@ -104,17 +100,17 @@ class RecipeSerializer(serializers.ModelSerializer):
             current_ingredient = get_object_or_404(
                 Ingredient, pk=ingredient['id']
             )
-            if current_ingredient in old_inst_ingredients:
-                old_inst_ingredients.remove(current_ingredient)
+            if current_ingredient.pk in old_inst_ingredients:
+                old_inst_ingredients.remove(current_ingredient.pk)
             else:
                 current_amount = ingredient.get('amount')
                 RecipeHasIngredient.objects.get_or_create(
                     recipe=instance, ingredient=current_ingredient,
                     amount=current_amount
                 )
-        for ingredient in old_inst_ingredients:
+        for ingredient_id in old_inst_ingredients:
             del_ingredient = RecipeHasIngredient.objects.filter(
-                recipe=instance.id, ingredient=ingredient.id
+                recipe=instance.id, ingredient=ingredient_id
             )
             del_ingredient.delete()
 

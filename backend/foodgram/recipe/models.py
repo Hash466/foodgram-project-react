@@ -138,7 +138,7 @@ class FavoriteHasRecipe(models.Model):
         verbose_name_plural = 'Избранные'
         constraints = (
             models.UniqueConstraint(
-                fields=['verbose_name', 'verbose_name_plural'],
+                fields=['user', 'recipe'],
                 name='unique favorite value'
             ),
         )
@@ -149,9 +149,13 @@ class FavoriteHasRecipe(models.Model):
 
 class UserHasShoppingCart(models.Model):
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, verbose_name='Пользователи'
+        User, on_delete=models.CASCADE, verbose_name='Пользователи',
+        related_name='carts_user'
     )
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    recipe = models.ForeignKey(
+        Recipe, on_delete=models.CASCADE, related_name='carts',
+        verbose_name='Рецепт'
+    )
 
     class Meta:
         verbose_name = 'Список покупок'
