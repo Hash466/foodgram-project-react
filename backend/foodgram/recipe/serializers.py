@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.generics import get_object_or_404
-from users.serializers import UserSerializer
 
+from users.serializers import UserSerializer
 from .models import (Ingredient, Recipe, RecipeHasIngredient, RecipeHasTag,
                      Tag, UserHasShoppingCart)
 
