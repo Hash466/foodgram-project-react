@@ -136,5 +136,4 @@ dmypy.json
 static/
 .vscode/
 requests.http
-Dockerfile 
 media/

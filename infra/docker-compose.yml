@@ -1,6 +1,12 @@
 version: '3.3'
 
 services:
+    db:
+    image: postgres:latest
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ../.env
   frontend:
     build:
       context: ../frontend
@@ -17,18 +23,12 @@ services:
       - ../docs/:/usr/share/nginx/html/api/docs/
     depends_on:
       - back
-  db:
-    image: postgres:latest
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-    env_file:
-      - ../.env
   back:
     image: hash466/foodgram:latest
     restart: always
     volumes:
-      - static_value:/code/static/
-      - media_value:/code/media/
+      - static_value:/app/static/
+      - media_value:/app/media/
     depends_on:
       - db
     env_file:
