@@ -5,7 +5,6 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
 from foodgram.settings import CUSTOM_SETTINGS_DRF
-
 from .mixins import CreateListRetrieveViewSet
 from .models import Subscription, User
 from .serializers import (SetPasswordSerializer, SubscriptionsSerializer,
