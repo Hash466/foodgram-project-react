@@ -1,6 +1,5 @@
 from djoser.serializers import SetPasswordSerializer as DjSetPasswordSerializer
 from djoser.serializers import UserCreateSerializer as DjUserCreateSerializer
-
 from rest_framework import serializers
 
 from recipe.models import Recipe
