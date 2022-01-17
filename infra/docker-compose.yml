@@ -35,6 +35,7 @@ services:
       - media_value:/var/www/django/media:ro
     depends_on:
       - back
+      - frontend
   
   back:
     #image: hash466/foodgram:latest
