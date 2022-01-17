@@ -43,7 +43,6 @@ services:
     volumes:
       - static_value:/app/static:rw
       - media_value:/app/media:rw
-      - ../backend/foodgram:/app # <-----------------------------------
     depends_on:
       - db
     env_file:
