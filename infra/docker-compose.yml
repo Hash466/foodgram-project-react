@@ -39,7 +39,9 @@ services:
   
   back:
     #image: hash466/foodgram:latest
-    build: ../backend
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
     restart: always
     volumes:
       - static_value:/app/static:rw
