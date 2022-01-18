@@ -9,3 +9,4 @@ djangorestframework_simplejwt==4.8.0
 psycopg2-binary
 python-dotenv
 gunicorn==20.0.4
+drf-extra-fields
