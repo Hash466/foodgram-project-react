@@ -125,6 +125,6 @@ def download_shopping_cart(request):
         )
     response = HttpResponse(shopping_cart, 'Content-Type: text/plain')
     response['Content-Disposition'] = (
-        'attachment;' 'filename="shopping_cart.txt"'
+        'attachment; filename="shopping_cart.txt"'
     )
     return response

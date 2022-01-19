@@ -70,7 +70,7 @@ class RecipeSerializer(serializers.ModelSerializer):
                 Ingredient, pk=ingredient['id']
             )
             current_amount = ingredient.get('amount')
-            if current_amount < 1:
+            if int(current_amount) < 1:
                 raise serializers.ValidationError(
                     "Количество единиц ингредиента не может быть меньше 1"
                 )
@@ -115,7 +115,7 @@ class RecipeSerializer(serializers.ModelSerializer):
                 old_inst_ingredients.remove(current_ingredient.pk)
             else:
                 current_amount = ingredient.get('amount')
-                if current_amount < 1:
+                if int(current_amount) < 1:
                     raise serializers.ValidationError(
                         "Количество единиц ингредиента не может быть меньше 1"
                     )
