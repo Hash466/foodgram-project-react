@@ -1,9 +1,9 @@
-from django_filters import FilterSet, filters
+from django_filters import rest_framework as filters
 
 from .models import Ingredient, Recipe
 
 
-class IngredientFilter(FilterSet):
+class IngredientFilter(filters.FilterSet):
     name = filters.CharFilter(field_name="name", lookup_expr="istartswith")
 
     class Meta:
@@ -11,7 +11,7 @@ class IngredientFilter(FilterSet):
         fields = ["name"]
 
 
-class RecipeFilter(FilterSet):
+class RecipeFilter(filters.FilterSet):
     author = filters.CharFilter(field_name="author__id", lookup_expr="exact")
     tags = filters.AllValuesMultipleFilter(
         field_name='tags__slug', lookup_expr="iexact",

@@ -106,7 +106,7 @@ class ShoppingCartView(APIView):
             UserHasShoppingCart, user=user, recipe__id=recipe_id
         )
         cart.delete()
-        return Response(status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 @api_view(['GET'])
