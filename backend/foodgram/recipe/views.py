@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from foodgram.settings import CUSTOM_SETTINGS_DRF
-from .filters import RecipeFilter
+from .filters import IngredientFilter, RecipeFilter
 from .models import (FavoriteHasRecipe, Ingredient, Recipe,
                      RecipeHasIngredient, Tag, UserHasShoppingCart)
 from .permissions import IsAuthorOrAdmin
@@ -31,9 +31,8 @@ class TagViewSet(viewsets.ReadOnlyModelViewSet):
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
-    filter_backends = (filters.SearchFilter,)
-    search_fields = ('^name',)
-    ordering_fields = ('name',)
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = IngredientFilter
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
