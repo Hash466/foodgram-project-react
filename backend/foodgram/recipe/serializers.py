@@ -62,7 +62,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 
         for tag in tags['tags']:
             current_tag = get_object_or_404(Tag, pk=tag)
-            RecipeHasTag.objects.create(
+            RecipeHasTag.objects.get_or_create(
                 recipe=recipe, tag=current_tag)
 
         for ingredient in ingredients:
@@ -70,7 +70,11 @@ class RecipeSerializer(serializers.ModelSerializer):
                 Ingredient, pk=ingredient['id']
             )
             current_amount = ingredient.get('amount')
-            RecipeHasIngredient.objects.create(
+            if current_amount < 1:
+                raise serializers.ValidationError(
+                    "Количество единиц ингредиента не может быть меньше 1"
+                )
+            RecipeHasIngredient.objects.get_or_create(
                 recipe=recipe, ingredient=current_ingredient,
                 amount=current_amount
             )
@@ -86,7 +90,7 @@ class RecipeSerializer(serializers.ModelSerializer):
 
         old_inst_tags = [item[0] for item in instance.tags.values_list('id')]
         old_inst_ingredients = [
-            item for item in instance.ingredients.values_list('id')
+            item[0] for item in instance.ingredients.values_list('id')
         ]
 
         for tag in tags['tags']:
@@ -111,6 +115,10 @@ class RecipeSerializer(serializers.ModelSerializer):
                 old_inst_ingredients.remove(current_ingredient.pk)
             else:
                 current_amount = ingredient.get('amount')
+                if current_amount < 1:
+                    raise serializers.ValidationError(
+                        "Количество единиц ингредиента не может быть меньше 1"
+                    )
                 RecipeHasIngredient.objects.get_or_create(
                     recipe=instance, ingredient=current_ingredient,
                     amount=current_amount
@@ -137,6 +145,7 @@ class RecipeSerializer(serializers.ModelSerializer):
             return False
         return UserHasShoppingCart.objects.filter(recipe=obj,
                                            user=request.user).exists()
+    
 
 class ShoppingCartSerializer(serializers.ModelSerializer):
     user = serializers.IntegerField(source='user.id')
